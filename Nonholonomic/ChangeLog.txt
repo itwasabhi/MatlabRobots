@@ -1,0 +1,48 @@
+5/21
+    - Mostly implent car_grid_search algorithm
+    - Use tree to store states as search progresses
+    - currently picking next-state from OPEN randomly
+
+5/22
+    - ignore car when out of bounds
+
+6/4
+    - Try a few cost functions
+        -- Euclidean seems to work the fastest, but paths aren't very nice
+    - return controls when path is found and plot controlled vehicle
+
+6/7
+    - Find and fix a very significant bug:
+      -- PropogateVehicle only works for small deltaT values. All propogations should be the same length
+      -- PropogateVehicle wraps the propogation code to ensure dt is very small. 
+    - Fix the search-grid 'found' method...instead of using euclidian cost function
+
+    - Now that the search-grid, and propogation tree are are actually working, lets fix the cost function!!!
+        
+6/8
+    - Tried introducing gif-recording. almost works, but plotting gets slowed down too much. needs to be fixed
+
+6/12
+    - collision checking with trailers + map
+    - Cleaned up rest of repo and moved around files
+    - Create new maps to test robot
+    - Create 'example' runner and examples to run
+
+6/15
+    - Get RRT plugged in and almost working... still need to properly do 'end' condition & return controls
+    - Get BiRRT plugged in as well...this will probably be useful/necessary.
+
+6/17
+    - Properly return & run controls from birrt
+
+6/18
+    - developing examples & testing framework
+        -- Need to be able to run same map/carconfig with different planners. 
+        -- Need to be able to save controls and rerun just the controls
+    - sooo many new examples!!
+    - save any new solutions into case file
+    - file to just display solution
+
+6/25
+    - GIF Recording!
+        

@@ -1,0 +1,6 @@
+matlab-tree
+===========
+
+A MATLAB class to represent the tree data structure.
+
+https://github.com/tinevez/matlab-tree
