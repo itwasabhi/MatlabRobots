@@ -6,6 +6,7 @@ Three planners have been implemented:
 - CarGridSearch, [2]
 
 ### Examples
+![Go car gooo](https://github.com/as2587/MatlabRobots/blob/master/Nonholonomic/examples/Case10_Blocks_1.gif)
 
 ### To Run
 - In order run a solver, you must define a *Case*: vehicle, start and end configurations, map. Use `GenerateCase.m` to help configure a case. 
@@ -17,4 +18,5 @@ Three planners have been implemented:
 
 ### References
 [1] Planning Algorithms, Steve LaValle
+
 [2] Principles of Robot Motion, Howie Choset
