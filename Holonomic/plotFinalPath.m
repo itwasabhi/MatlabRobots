@@ -1,4 +1,8 @@
-function plotFinalPath(robot, path, steps, animate, dispHistory)
+function plotFinalPath(robot, path, steps, animate, dispHistory, saveToGif)
+
+if ~isempty(saveToGif)
+    SaveFrameToGif(saveToGif, animate, 1);
+end
 
 %h = transformAndPlot(robot, path(1,:));
 h = [];
@@ -13,6 +17,10 @@ for p = 2:size(path,1)
             delete(h);
         end
         h = transformAndPlot(robot, subPath(s,:));
+        
+        if ~isempty(saveToGif)
+        SaveFrameToGif(saveToGif, animate, 0);
+        end
     end
 end
 

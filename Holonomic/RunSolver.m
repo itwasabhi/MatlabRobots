@@ -1,6 +1,12 @@
 function RunSolver()
 clc; close all;
 figure; hold on;
+xlabel('X Position');
+ylabel('Y Position');
+title('Planned Path for Object');
+
+% Save to: 
+filename = 'examples/slitsInBlocks2.gif';
 %Select desired map
 map = load('../Maps/Blocks1.mat');
 axis([map.xRange, map.yRange]);
@@ -10,7 +16,7 @@ plotLines(map.lines, '-k');
 piano = load('Pianos/slits.mat');
 
 %Desired initial configuration
-initialConfig = [-4,7,-pi/2];
+initialConfig = [-16,0,0];
 init_Global = getLinesInGlobal(piano.lines, initialConfig);
 plotRobotPose(initialConfig, 1);
 plotLines(init_Global, '-b');
@@ -24,5 +30,5 @@ plotLines(goal_Global, '-g');
 %%%%
 % Search for solution (RRT, PRM)
 path = buildRRT(map.lines, piano.lines, initialConfig, goalConfig, 1, 1000);
-plotFinalPath(piano.lines, path, 1, 0.1, true);
+plotFinalPath(piano.lines, path, 1, 0.1, true, filename);
 end

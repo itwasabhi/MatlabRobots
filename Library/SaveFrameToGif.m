@@ -1,4 +1,4 @@
-function SaveFrameToGif(filename, time, first)
+function SaveFrameToGif(filename, dt, first)
 
 % Append current frame to 
 frame = getframe(1);
@@ -7,7 +7,7 @@ im = frame2im(frame);
 if first
     imwrite(imind,cm,filename,'gif', 'Loopcount',inf);
 else
-    imwrite(imind,cm,filename,'gif','WriteMode','append', 'DelayTime',0);
+    imwrite(imind,cm,filename,'gif','WriteMode','append', 'DelayTime',dt);
 end
 
 end

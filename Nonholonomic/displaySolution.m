@@ -12,14 +12,14 @@ title( c.solutions{sID}.info);
 
 % Save intial frame to GIF if needed
 if (length(saveToFile)>4)
-    SaveFrameToGif(saveToFile, 1, 1);
+    SaveFrameToGif(saveToFile, 0,1);
 end
 
 animateCar(c.carStart, c.solutions{sID}.controls, saveToFile);
 
 % Save final frame to GIF if needed
 if (length(saveToFile)>4)
-    SaveFrameToGif(saveToFile, 1, 0);
+    SaveFrameToGif(saveToFile, 0, 0);
 end
 
 end

@@ -6,11 +6,16 @@ runtime = 500;
 
 figure; hold on;
 axis([-10,10,-10,10]);
+xlabel('X Position');
+ylabel('Y Position');
+title('Patroling robots maintaining Velocity Osbtacles');
+filename = 'examples/example1.gif';
+SaveFrameToGif(filename,0, 1);
 
 %temp -- load patrolPts
 tempPat{1} = [-4.5392   -4.0058; 2.9724    6.8129];
 tempPat{2} = [ 0.2995    7.2807; -2.2811   -5.6433];
-tempPat{3} = [ 2.8341   -2.0175; 2.0046    4.1228];
+tempPat{3} = [ 2.8341   -2.0175; 1.4    6.1228];
 
 %Initialize robot positions and patrol paths
 allRobots = cell(nRobots,1);
@@ -101,7 +106,9 @@ for j=1:runtime
             allRobots{r}.ptID = newID;
         end
     end
-
+    if mod(j, 1)==0
+        SaveFrameToGif(filename, 0.1, 0);
+    end
     pause(0.1);
 end
 

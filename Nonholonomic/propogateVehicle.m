@@ -26,7 +26,7 @@ while totalTime < dt
         pause(deltaPropogation);
         %Enough to to save image for GIF every .1 seconds
         if (length(plotting)>4 && (mod(totalTime, .1)==0))
-            SaveFrameToGif(plotting, deltaPropogation, 0);
+            SaveFrameToGif(plotting, 0,0);
         end
         delete(currH);
     end
