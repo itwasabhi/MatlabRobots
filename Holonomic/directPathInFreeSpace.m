@@ -1,4 +1,4 @@
-function ret = directPathInFreeSpace(walls, robot, qA, qB, minSpacing)
+function ret = directPathInFreeSpace(map, config, qA, qB, minSpacing)
 
 delta = qB - qA; 
 qMidpoint = (qB + qA)/2;
@@ -8,15 +8,15 @@ if (totalDist<minSpacing)
     return;
 end
 
-if stateInFreeSpace(walls, robot, qMidpoint) && ...
-    directPathInFreeSpace(walls, robot, qA, qMidpoint, minSpacing) && ...
-    directPathInFreeSpace(walls, robot, qMidpoint, qB, minSpacing)
-    ret = true; 
-    %plotRobot(qMidpoint, 1,'g')
+robotMidpoint.config = config;
+robotMidpoint.state = qMidpoint;
 
+if robotInFreeSpace(robotMidpoint, map) && ...
+    directPathInFreeSpace(map, config, qA, qMidpoint, minSpacing) && ...
+    directPathInFreeSpace(map, config, qMidpoint, qB, minSpacing)
+    ret = true; 
 else
     ret = false;
-    %plotRobot(qMidpoint, 1,'r')
 end
 
 end

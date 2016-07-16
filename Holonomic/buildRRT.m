@@ -1,46 +1,41 @@
-function [path] = buildRRT(walls, robot, qStart, qEnd, searchStepSize, maxN)
-%Grows RRT and finds path from startPt to endPt. Returns a set of waypoints. Plots RRT online.  
+function [path] = buildRRT(robotStart, robotGoal, map, params)
+%Grows RRT and finds path from startPt to endPt. Returns a set of waypoints.
 
-%INPUTS
-%   obstVert: Cell array where each cell holds vertices of an obstacle
-%   boundVert: k-by-2 array that stores k points of boundary
-%   startPt = [x,y] start position
-%   endPt = [x,y] end (goal) position
-%   stepSize = Step size for RRT segments
-%   robotRad = radius of robot
-%   maxN = max number of iterations before giving up
+%Ensure start and end points are valid
+assert(robotInFreeSpace(robotStart, map), 'Start state not in free space');
+assert(robotInFreeSpace(robotGoal, map), 'End state not in free space');
 
-%OUTPUTS
-%   path = l-by-3 array that stores waypoints to traverse from qStart to
-%           qEnd
+% Setup some parameters (or load from params)
 lineStepSize = 0.1;
-allVert = qStart;
+searchStepSize = 1;
+maxN = 1000;
+
+% Get variables ready
+allVert = robotStart.state;
 adjMat = 0;
-
-assert(stateInFreeSpace(walls, robot, qStart), 'Start state not in free space');
-assert(stateInFreeSpace(walls, robot, qEnd), 'End state not in free space');
-
-
+robotConfig = robotStart.config;
 goalUnlocked = false;
 failedSamp = 0;
+
 while (size(allVert,1)<maxN) && (~goalUnlocked)
-    currSamp = sampleRandom(1, walls, robot);
+    currSamp = sampleRandom(1, map, robotStart);
     
     %Find closest point in current tree
     nearID = findNearestPoint(currSamp, allVert);
     
     %Extend closest point by stepSize
     delta  = currSamp- allVert(nearID,:);
-    qNew = allVert(nearID,:) + delta/norm(delta)*searchStepSize;
-        
+    newState = allVert(nearID,:) + delta/norm(delta)*searchStepSize;
+    robotNew.config = robotConfig;
+    robotNew.state = newState;
     
-    %Check if edge is in free space, considering robot radius.
-    if stateInFreeSpace(walls, robot, qNew) && directPathInFreeSpace(walls, robot, allVert(nearID,:), qNew, lineStepSize);
-        %sample_Global = GetRobotInGlobal(robot, currSamp);
-        %plotRobot(qNew, 1, 'c');
-        %plotLines(sample_Global, '-m');
+    nearState = allVert(nearID,:);
+
+    %Check if edge is in free space
+    if robotInFreeSpace(robotNew, map) && ... 
+        directPathInFreeSpace(map, robotConfig, nearState, newState, lineStepSize);
         
-        allVert =[allVert; qNew];
+        allVert =[allVert; newState];
         [ra, ca] = size(adjMat);
         newAdj = zeros(ra+1, ca+1);
         newAdj(1:ra, 1:ca) = adjMat;
@@ -48,7 +43,7 @@ while (size(allVert,1)<maxN) && (~goalUnlocked)
         adjMat = newAdj;
         
         %Check if endPt is in view from q_new
-        if directPathInFreeSpace(walls, robot, qNew, qEnd, lineStepSize)
+        if directPathInFreeSpace(map, robotConfig, newState, robotGoal.state, lineStepSize)
             goalUnlocked = true;            
         end
     else
@@ -57,7 +52,7 @@ while (size(allVert,1)<maxN) && (~goalUnlocked)
     
 end
 
-%Build path using adjacency Vertex
+%Build path using adjacency vertex
 if goalUnlocked
     nextPrev = size(adjMat,1);
     path = allVert(nextPrev,:);
@@ -65,7 +60,7 @@ if goalUnlocked
         nextPrev = find(adjMat(:,nextPrev));
         path = [allVert(nextPrev,:); path];
     end
-    path = [path; qEnd];
+    path = [path; robotGoal.state];
     
     fprintf('RRT Path found!\n');
 else

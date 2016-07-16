@@ -1,34 +1,32 @@
 function RunSolver()
+%Specify a case file to solve, the solver, and some information
+% If a solution is found, it will be saved into the case file
+
 clc; close all;
-figure; hold on;
-xlabel('X Position');
-ylabel('Y Position');
-title('Planned Path for Object');
 
-% Save to: 
-filename = 'examples/slitsInBlocks2.gif';
-%Select desired map
-map = load('../Maps/Blocks1.mat');
-axis([map.xRange, map.yRange]);
-plotLines(map.lines, '-k');
+currentCase = 'examples/Case2_Point.mat';
+c = load(currentCase);
 
-%Select desired figure
-piano = load('Pianos/slits.mat');
+plotCase(c.robotStart, c.robotGoal, c.map);
 
-%Desired initial configuration
-initialConfig = [-16,0,0];
-init_Global = getLinesInGlobal(piano.lines, initialConfig);
-plotRobotPose(initialConfig, 1);
-plotLines(init_Global, '-b');
+params = [];
+path = runSolver(c, @buildRRT, params);
+info = 'RRT';
 
-%Desired final configuration
-goalConfig = [5,-7,pi/2];
-goal_Global = getLinesInGlobal(piano.lines, goalConfig);
-plotRobotPose(goalConfig, 1);
-plotLines(goal_Global, '-g');
+if ~isempty(path)
+    if ~isfield(c, 'solutions')
+        c.solutions = {};
+    end
+    solutionID = length(c.solutions)+1;
+    
+    c.solutions{solutionID}.path = path;
+    c.solutions{solutionID}.info = info;
+    c.solutions{solutionID}.params = params;
+    save(currentCase, '-struct', 'c'); %Save current case with solutions
+    displaySolution(currentCase, solutionID);
+end
+end
 
-%%%%
-% Search for solution (RRT, PRM)
-path = buildRRT(map.lines, piano.lines, initialConfig, goalConfig, 1, 1000);
-plotFinalPath(piano.lines, path, 1, 0.1, true, filename);
+function path = runSolver(c, planner, params)
+path = planner(c.robotStart, c.robotGoal, c.map, params);
 end

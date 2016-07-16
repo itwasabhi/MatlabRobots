@@ -1,51 +1,50 @@
-function plotFinalPath(robot, path, steps, animate, dispHistory, saveToGif)
+function plotFinalPath(robotConfig, path, stepSize, dt, dispHistory, saveToGif)
 
 if ~isempty(saveToGif)
-    SaveFrameToGif(saveToGif, animate, 1);
+    SaveFrameToGif(saveToGif, dt, 1);
 end
 
-%h = transformAndPlot(robot, path(1,:));
-h = [];
+currRobot.config = robotConfig;
+currRobot.state = path(1,:);
+h = plotRobot(currRobot);
+
 for p = 2:size(path,1)
-    subPath = getDirectPath(robot, path(p-1,:), path(p,:), steps);
+    subPath = getDirectPath(path(p-1,:), path(p,:), stepSize);
     
     for s = 1:size(subPath,1)
-        if (animate>0)
-            pause(animate);
+        if (dt>0)
+            pause(dt);
         end
         if ~isempty(h) && ~dispHistory
             delete(h);
         end
-        h = transformAndPlot(robot, subPath(s,:));
+        currRobot.state = subPath(s,:);
+        h = plotRobot(currRobot, 'b');
         
         if ~isempty(saveToGif)
-        SaveFrameToGif(saveToGif, animate, 0);
+        SaveFrameToGif(saveToGif, dt, 0);
         end
     end
 end
 
-%transformAndPlot(robot, path(end,:));
+currRobot.state = path(end,:);
+plotRobot(currRobot);
 
 end
 
 
-function path = getDirectPath(robot, qA, qB, steps)
+function path = getDirectPath(qA, qB, stepSize)
 delta = qB-qA;
 qMidpoint = (qB + qA)/2;
 
 totalDist = norm(delta); 
-if (totalDist<steps)
+if (totalDist<stepSize)
     path = [];
     return;
 end
 
-firstHalf = getDirectPath(robot, qA, qMidpoint, steps);
-secondHalf = getDirectPath(robot, qMidpoint, qB, steps);
+firstHalf = getDirectPath(qA, qMidpoint, stepSize);
+secondHalf = getDirectPath(qMidpoint, qB, stepSize);
 path = [ firstHalf; qMidpoint; secondHalf];
 
-end
-
-function h = transformAndPlot(robot, q)
-q_global = getLinesInGlobal(robot, q);
-h = plotLines(q_global, '-b');
 end

@@ -9,9 +9,10 @@ function controls = buildBIRRT(carStart, carGoal, map, params)
 s_allVert = carStart.state; s_adjMat = 0;
 e_allVert = carGoal.state; e_adjMat = 0;
 
-%Ensure start and end points are in q_free
+%Ensure start and end points are valid
 assert(stateInFreeSpace(carStart, map), 'Start state not in free space');
 assert(stateInFreeSpace(carGoal, map), 'End state not in free space');
+assert(length(carStart.state) == length(carGoal.state), 'Start and End state of varying DOF');
 
 %Parameters
 maxN = 700;

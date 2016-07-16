@@ -11,12 +11,7 @@ function[xyG] = robot2global(pose,xyR)
 % 
 %   OUTPUTS
 %       xyG     2D point in global coordinates (1-by-2)
-% 
-% 
-%   Cornell University
-%   MAE 5180: Autonomous Mobile Robots
-%   Homework #1
-%   Sriraman, Abhishek
+
 
 
 %Transformation Matrix to convert from B to I
