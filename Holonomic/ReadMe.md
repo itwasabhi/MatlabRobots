@@ -7,7 +7,7 @@ One planner has been implemented:
 
 ### Examples
 ![Go object gooo](https://github.com/as2587/MatlabRobots/blob/master/Holonomic/examples/slitsInBlocks1.gif)
-![Go object gooo](https://github.com/as2587/MatlabRobots/blob/master/Holonomic/examples/Cas2_Point_1.gif)
+![Go object gooo](https://github.com/as2587/MatlabRobots/blob/master/Holonomic/examples/Case2_Point_1.gif)
 
 ### To Run
 - In order run a solver, you must define a *Case*: robot, start and end configurations, map. Use `GenerateCase.m` to help configure a case. 
